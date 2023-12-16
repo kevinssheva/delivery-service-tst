@@ -3,14 +3,18 @@
 namespace App\Controllers;
 
 use App\Models\DriverModel;
+use App\Models\PengirimanModel;
+use CodeIgniter\I18n\Time;
 
 class Pengiriman extends BaseController
 {
   protected $pesananList;
   protected $produkList;
+  protected $pengirimanModel;
 
   public function __construct()
   {
+    $this->pengirimanModel = new PengirimanModel();
     // Ambil data pesanan dari API order
     $apiPesananUrl = 'http://localhost:8081/api/order';
     $chPesanan = curl_init($apiPesananUrl);
@@ -71,5 +75,20 @@ class Pengiriman extends BaseController
     ];
 
     return view('pengiriman/page', $data);
+  }
+
+  public function create()
+  {
+    // dd($this->request->getVar());
+    $this->pengirimanModel->save([
+      'tanggal_pengiriman' => Time::now()->toDateString(),
+      'tanggal_penerimaan' => null,
+      'alamat_tujuan' => $this->request->getVar('alamat'),
+      'status' => 'dikirim',
+      'id_pesanan' => $this->request->getVar('id_pesanan'),
+      'nama_penerima' => $this->request->getVar('nama_penerima'),
+      'telepon_penerima' => $this->request->getVar('telepon_penerima'),
+      'id_driver' => $this->request->getVar('id_driver'),
+    ]);
   }
 }

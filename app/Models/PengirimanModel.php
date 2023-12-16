@@ -8,5 +8,5 @@ class PengirimanModel extends Model
 {
   protected $table = 'pengiriman';
   protected $useTimestamps = true;
-  protected $allowedFields = ['tanggal_pengiriman', 'tanggal_penerimaan', 'alamat_tujuan', 'status', 'id_pesanan', 'nama_penerima'];
+  protected $allowedFields = ['tanggal_pengiriman', 'tanggal_penerimaan', 'alamat_tujuan', 'status', 'id_pesanan', 'nama_penerima', 'telepon_penerima', 'id_driver'];
 }

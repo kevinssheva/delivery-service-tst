@@ -40,9 +40,27 @@ class Pengiriman extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => 255,
             ],
+            'telepon_penerima' => [
+                'type' => 'VARCHAR',
+                'constraint' => 15,
+            ],
+            'id_driver' => [
+                'type' => 'INT',
+                'constraint' => 5,
+                'unsigned' => true,
+            ],
+            'created_at' => [
+                'type' => 'DATETIME',
+                'null' => true,
+            ],
+            'updated_at' => [
+                'type' => 'DATETIME',
+                'null' => true,
+            ],
         ]);
 
         $this->forge->addPrimaryKey('id');
+        $this->forge->addForeignKey('id_driver', 'driver', 'id', 'CASCADE', 'CASCADE');
 
         $this->forge->createTable('pengiriman');
     }
