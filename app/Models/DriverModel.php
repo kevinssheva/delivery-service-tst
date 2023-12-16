@@ -6,5 +6,5 @@ use CodeIgniter\Model;
 
 class DriverModel extends Model
 {
-  protected $table = 'pengiriman';
+  protected $table = 'driver';
 }
