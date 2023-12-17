@@ -2,7 +2,7 @@
 
 <?= $this->section('content'); ?>
 <div class="container my-5">
-  <h1 class="mb-3 fw-bold">Order Delivery</h1>
+  <h1 class="mb-3 fw-bold">Order Detail</h1>
   <div class="row">
     <div class="col col-6">
       <div class="card rounded overflow-hidden">
