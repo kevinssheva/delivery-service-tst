@@ -91,4 +91,56 @@ class Pengiriman extends BaseController
       'id_driver' => $this->request->getVar('id_driver'),
     ]);
   }
+
+  public function detail($id = 0)
+  {
+    $pengiriman = $this->pengirimanModel
+      ->join('driver', 'driver.id = pengiriman.id_driver', 'LEFT')
+      ->select('pengiriman.*, driver.nama AS nama, driver.no_telepon AS no_telepon, driver.plat AS plat')
+      ->find($id);
+    // dd($pengiriman);
+    $pesanan = current(array_filter($this->pesananList, function ($pesanan) use ($pengiriman) {
+      return $pesanan['id_pesanan'] == $pengiriman['id_pesanan'];
+    }));
+
+    if (!$pesanan) {
+      // Pesanan tidak ditemukan
+      return 'Pesanan dengan ID ' . $id . ' tidak ditemukan.';
+    }
+
+    // Ambil ID produk dari pesanan
+    $produkId = $pesanan['produk_id'];
+
+    // Cari produk berdasarkan ID
+    $produk = current(array_filter($this->produkList, function ($produk) use ($produkId) {
+      return $produk['id'] == $produkId;
+    }));
+
+    if (!$produk) {
+      // Produk tidak ditemukan
+      return 'Produk dengan ID ' . $produkId . ' tidak ditemukan.';
+    }
+
+    // Ambil data driver
+
+    // Kembalikan data ke view
+    $data = [
+      'title' => 'Pengiriman',
+      'pesanan' => $pesanan,
+      'produk' => $produk,
+      'pengiriman' => $pengiriman,
+    ];
+
+    return view('pengiriman/detail', $data);
+  }
+
+  public function changeStatus()
+  {
+    // dd($this->request->getVar());
+    $id = $this->request->getVar('id');
+    $this->pengirimanModel->save([
+      'id' => $id,
+      'status' => $this->request->getVar('status'),
+    ]);
+  }
 }

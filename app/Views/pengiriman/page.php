@@ -3,6 +3,7 @@
 <?= $this->section('content'); ?>
 <div class="container my-5">
   <form action="/pengiriman/create" method="post">
+    <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
     <h1 class="mb-3 fw-bold">Order Delivery</h1>
     <div class="row">
       <div class="col col-6">
