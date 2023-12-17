@@ -16,14 +16,14 @@ class Pengiriman extends BaseController
   {
     $this->pengirimanModel = new PengirimanModel();
     // Ambil data pesanan dari API order
-    $apiPesananUrl = 'http://localhost:8081/api/order';
+    $apiPesananUrl = 'http://localhost:8080/api/order';
     $chPesanan = curl_init($apiPesananUrl);
     curl_setopt($chPesanan, CURLOPT_RETURNTRANSFER, true);
     $responsePesanan = curl_exec($chPesanan);
     curl_close($chPesanan);
 
     // Ambil data produk dari API produk
-    $apiProdukUrl = 'http://localhost:8081/api/produk';
+    $apiProdukUrl = 'http://localhost:8080/api/produk';
     $chProduk = curl_init($apiProdukUrl);
     curl_setopt($chProduk, CURLOPT_RETURNTRANSFER, true);
     $responseProduk = curl_exec($chProduk);

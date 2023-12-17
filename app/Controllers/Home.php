@@ -6,7 +6,7 @@ class Home extends BaseController
 {
     public function index()
     {
-        $apiUrl = 'http://localhost:8081/api/order';
+        $apiUrl = 'http://localhost:8080/api/order';
 
         $ch = curl_init($apiUrl);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
