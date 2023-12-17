@@ -143,4 +143,12 @@ class Pengiriman extends BaseController
       'status' => $this->request->getVar('status'),
     ]);
   }
+  public function deliveryList(): string
+  {
+    $data = [
+      'title' => 'Daftar Pengiriman',
+      'pengiriman' => $this->pengirimanModel->findAll()
+    ];
+    return view('pengiriman/listPengiriman', $data);
+  }
 }
