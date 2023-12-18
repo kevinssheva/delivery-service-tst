@@ -2,8 +2,13 @@
 
 <?= $this->section('content'); ?>
 <div class="container">
-    <h2 class="mt-3 text-center">Ini daftar pengiriman</h2>
-    <div class="row container-card justify-content-center">
+    <h2 class="mt-3 text-left fw-bold">Riwayat Pengiriman</h2>
+    <?php if (session()->getFlashdata('pesan')) : ?>
+        <div class="alert alert-success my-2" role="alert">
+            <?= session()->getFlashdata('pesan'); ?>
+        </div>
+    <?php endif; ?>
+    <div class="row container-card justify-content-start">
         <?php foreach ($pengiriman as $p) : ?>
             <div class="card mx-3 my-3 py-2" style="width: 18rem;">
                 <div class="card-header" style="background-color: #c9caca">

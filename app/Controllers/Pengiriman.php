@@ -90,7 +90,7 @@ class Pengiriman extends BaseController
     ];
 
     $response = $this->sendNotification($data);
-
+    session()->setFlashdata('pesan', 'Pengiriman berhasil dilakukan');
     return redirect()->to('/pengiriman');
   }
 
@@ -149,6 +149,7 @@ class Pengiriman extends BaseController
     $response = $this->sendNotification($data);
 
     //redirect back
+    session()->setFlashdata('pesan', 'Status pengiriman berhasil diubah');
     return redirect()->to('/pengiriman');
   }
 

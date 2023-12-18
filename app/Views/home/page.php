@@ -2,7 +2,7 @@
 
 <?= $this->section('content'); ?>
 <div class="container">
-  <h2 class="mt-3 text-center">Ini daftar pesanan</h2>
+  <h2 class="mt-3 text-left fw-bold">Pesanan Belum Dikirim</h2>
   <div class="row">
     <?php foreach ($pesanan as $p) : ?>
       <div class="card mx-3 my-2 px-0 shadow rounded-3 overflow-hidden border border-0" style="width: 18rem;">
