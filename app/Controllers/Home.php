@@ -16,7 +16,7 @@ class Home extends BaseController
         curl_close($ch);
 
         if ($response) {
-            $this->pesananList = json_decode($response, true);
+            $this->pesananList = json_decode($response, true)['data'];
         } else {
             echo 'Failed to fetch data from API.';
         }
