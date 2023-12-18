@@ -13,11 +13,9 @@
                 <div class="card-body">
                     <p class="card-text">Alamat: <?= $p['alamat_tujuan']; ?></p>
                     <p class="card-text">Tanggal: <?= $p['tanggal_pengiriman']; ?></p>
-                    <p class="card-text">Telepon: <?= $p['telepon_penerima']; ?></p>
+                    <p class="card-text">Status: <strong><?= $p['status']; ?></strong></p>
                 </div>
-                <div class="card-footer">
-                    <?= $p['status']; ?>
-                </div>
+                <a href="/pengiriman/detail/<?= $p['id']; ?>" class="btn btn-outline-primary">Detail</a>
             </div>
         <?php endforeach; ?>
     </div>
