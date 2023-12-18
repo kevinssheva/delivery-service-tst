@@ -15,6 +15,7 @@ class Pengiriman extends BaseController
   public function __construct()
   {
     $this->pengirimanModel = new PengirimanModel();
+
     // Ambil data pesanan dari API order
     $apiPesananUrl = 'http://localhost:8080/api/order';
     $chPesanan = curl_init($apiPesananUrl);
@@ -30,43 +31,36 @@ class Pengiriman extends BaseController
     curl_close($chProduk);
 
     if ($responsePesanan && $responseProduk) {
-      $this->pesananList = json_decode($responsePesanan, true);
-      $this->produkList = json_decode($responseProduk, true);
-      // dd($this->pesananList, $this->produkList);
+      $this->pesananList = json_decode($responsePesanan, true)['data'];
+      $this->produkList = json_decode($responseProduk, true)['data'];
     } else {
       echo 'Failed to fetch data from API.';
     }
   }
+
   public function index($id = 0): string
   {
-    // Cari pesanan berdasarkan ID
     $pesanan = current(array_filter($this->pesananList, function ($pesanan) use ($id) {
       return $pesanan['id_pesanan'] == $id;
     }));
 
     if (!$pesanan) {
-      // Pesanan tidak ditemukan
       return 'Pesanan dengan ID ' . $id . ' tidak ditemukan.';
     }
 
-    // Ambil ID produk dari pesanan
     $produkId = $pesanan['produk_id'];
 
-    // Cari produk berdasarkan ID
     $produk = current(array_filter($this->produkList, function ($produk) use ($produkId) {
       return $produk['id'] == $produkId;
     }));
 
     if (!$produk) {
-      // Produk tidak ditemukan
       return 'Produk dengan ID ' . $produkId . ' tidak ditemukan.';
     }
 
-    // Ambil data driver
     $driverModel = new DriverModel();
     $drivers = $driverModel->findAll();
 
-    // Kembalikan data ke view
     $data = [
       'title' => 'Pengiriman',
       'driver' => $drivers,
@@ -79,7 +73,6 @@ class Pengiriman extends BaseController
 
   public function create()
   {
-    // dd($this->request->getVar());
     $this->pengirimanModel->save([
       'tanggal_pengiriman' => Time::now()->toDateString(),
       'tanggal_penerimaan' => null,
@@ -90,6 +83,15 @@ class Pengiriman extends BaseController
       'telepon_penerima' => $this->request->getVar('telepon_penerima'),
       'id_driver' => $this->request->getVar('id_driver'),
     ]);
+
+    $data = [
+      'id_pesanan' => $this->request->getVar('id_pesanan'),
+      'status_pengiriman' => 'dikirim',
+    ];
+
+    $response = $this->sendNotification($data);
+
+    echo $response;
   }
 
   public function detail($id = 0)
@@ -98,32 +100,25 @@ class Pengiriman extends BaseController
       ->join('driver', 'driver.id = pengiriman.id_driver', 'LEFT')
       ->select('pengiriman.*, driver.nama AS nama, driver.no_telepon AS no_telepon, driver.plat AS plat')
       ->find($id);
-    // dd($pengiriman);
+
     $pesanan = current(array_filter($this->pesananList, function ($pesanan) use ($pengiriman) {
       return $pesanan['id_pesanan'] == $pengiriman['id_pesanan'];
     }));
 
     if (!$pesanan) {
-      // Pesanan tidak ditemukan
       return 'Pesanan dengan ID ' . $id . ' tidak ditemukan.';
     }
 
-    // Ambil ID produk dari pesanan
     $produkId = $pesanan['produk_id'];
 
-    // Cari produk berdasarkan ID
     $produk = current(array_filter($this->produkList, function ($produk) use ($produkId) {
       return $produk['id'] == $produkId;
     }));
 
     if (!$produk) {
-      // Produk tidak ditemukan
       return 'Produk dengan ID ' . $produkId . ' tidak ditemukan.';
     }
 
-    // Ambil data driver
-
-    // Kembalikan data ke view
     $data = [
       'title' => 'Pengiriman',
       'pesanan' => $pesanan,
@@ -136,11 +131,70 @@ class Pengiriman extends BaseController
 
   public function changeStatus()
   {
-    // dd($this->request->getVar());
     $id = $this->request->getVar('id');
     $this->pengirimanModel->save([
       'id' => $id,
       'status' => $this->request->getVar('status'),
     ]);
+
+    $id_pesanan = $this->pengirimanModel->find($id)['id_pesanan'];
+
+
+
+    $data = [
+      'id_pesanan' => $id_pesanan,
+      'status_pengiriman' => $this->request->getVar('status'),
+    ];
+
+    $response = $this->sendNotification($data);
+
+    echo $response;
+  }
+
+  protected function sendNotification($data)
+  {
+    $apiUrl = 'http://localhost:8080/api/notifikasi/create';
+    $ch = curl_init($apiUrl);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+      'Content-Type: application/json',
+    ]);
+
+    $response = curl_exec($ch);
+    curl_close($ch);
+
+    return $response ? $response : 'Gagal membuat notifikasi.';
+  }
+
+  public function getStatus($id_pesanan)
+  {
+    try {
+      $pengiriman = $this->pengirimanModel
+        ->where('id_pesanan', $id_pesanan)
+        ->first();
+
+      if ($pengiriman) {
+        $response = [
+          'status' => 'success',
+          'data' => $pengiriman,
+        ];
+
+        return $this->response->setJSON($response);
+      } else {
+        $response = [
+          'status' => 'error',
+          'message' => 'Pengiriman not found',
+        ];
+        return $this->response->setStatusCode(404)->setJSON($response);
+      }
+    } catch (\Exception $e) {
+      $response = [
+        'status' => 'error',
+        'message' => 'An error occurred',
+      ];
+      return $this->response->setStatusCode(500)->setJSON($response);
+    }
   }
 }
