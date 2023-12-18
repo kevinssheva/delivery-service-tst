@@ -21,30 +21,30 @@ class Login extends BaseController
 
   public function login_action()
   {
-  
-      $user_username = $this->request->getPost('user_username');
-      $password = $this->request->getPost('password');
-  
-      if ($user_username == '' or $password == '') {
-          $err = "Input your username and password";
+
+    $user_username = $this->request->getPost('user_username');
+    $password = $this->request->getPost('password');
+
+    if ($user_username == '' or $password == '') {
+      $err = "Input your username and password";
+    }
+
+    if (empty($err)) {
+      $dataUser = $this->userModel->where("username", $user_username)->first();
+      if ($dataUser && $dataUser['password'] == $password) {
+        $sessionData = [
+          'user_id' => $dataUser['id'],
+          'username' => $dataUser['username'],
+          'password' => $dataUser['password'],
+        ];
+
+        session()->set($sessionData);
+        return redirect()->to(base_url('/'));
+      } else {
+        $err = "Invalid input";
+        return redirect()->to(base_url('login'));
       }
-  
-      if (empty($err)) {
-          $dataUser = $this->userModel->where("username", $user_username)->first();
-          if ($dataUser && $dataUser['password'] == md5($password)) {
-              $sessionData = [
-                  'user_id' => $dataUser['id'],
-                  'username' => $dataUser['username'],
-                  'password' => $dataUser['password'],
-              ];
-  
-              session()->set($sessionData);
-              return redirect()->to(base_url('/'));
-          } else {
-              $err = "Invalid input";
-              return redirect()->to(base_url('login'));
-          }
-      }
+    }
   }
 
   public function logout()
@@ -52,6 +52,4 @@ class Login extends BaseController
     session()->destroy();
     return redirect()->to(base_url('login'));
   }
-  
-  
 }

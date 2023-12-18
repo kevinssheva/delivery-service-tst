@@ -1,0 +1,60 @@
+version: "3.8"
+services:
+  # Application
+  app:
+    build:
+      context: ./docker/services/app
+      dockerfile: app.dockerfile
+    working_dir: /var/www
+    env_file: .env
+    volumes:
+      - ./:/var/www
+    networks:
+      - ds-network
+
+  # Web Server
+  web:
+    build:
+      context: ./docker/services/web
+      dockerfile: web.dockerfile
+    working_dir: /var/www
+    restart: always
+    volumes:
+      - ./:/var/www
+    ports:
+      - "8081:81"
+    networks:
+      - ds-network
+
+  # Database
+  database:
+    image: mysql:8.0.25
+    volumes:
+      - ./docker/volumes/mysql:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: delivery_db
+      MYSQL_ALLOW_EMPTY_PASSWORD: true
+      # MYSQL_USER: secret
+      # MYSQL_PASSWORD: secret
+    ports:
+      - "3306:3306"
+    networks:
+      - ds-network
+
+  npm:
+    image: node:alpine
+    container_name: npm
+    volumes:
+      - ./:/var/www
+      - .env:/var/www/.env
+    ports:
+      - 80:80
+    working_dir: /var/www
+    profiles: ["npm"]
+    entrypoint: ["npm"]
+    networks:
+      - ds-network
+
+networks:
+  ds-network:
+    name: "delivery-service-network"

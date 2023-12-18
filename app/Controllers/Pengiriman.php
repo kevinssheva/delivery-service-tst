@@ -167,36 +167,7 @@ class Pengiriman extends BaseController
 
     return $response ? $response : 'Gagal membuat notifikasi.';
   }
-
-  public function getStatus($id_pesanan)
-  {
-    try {
-      $pengiriman = $this->pengirimanModel
-        ->where('id_pesanan', $id_pesanan)
-        ->first();
-
-      if ($pengiriman) {
-        $response = [
-          'status' => 'success',
-          'data' => $pengiriman,
-        ];
-
-        return $this->response->setJSON($response);
-      } else {
-        $response = [
-          'status' => 'error',
-          'message' => 'Pengiriman not found',
-        ];
-        return $this->response->setStatusCode(404)->setJSON($response);
-      }
-    } catch (\Exception $e) {
-      $response = [
-        'status' => 'error',
-        'message' => 'An error occurred',
-      ];
-      return $this->response->setStatusCode(500)->setJSON($response);
-    }
-  }
+  
   public function deliveryList(): string
   {
     $data = [
