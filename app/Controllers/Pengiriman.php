@@ -197,4 +197,12 @@ class Pengiriman extends BaseController
       return $this->response->setStatusCode(500)->setJSON($response);
     }
   }
+  public function deliveryList(): string
+  {
+    $data = [
+      'title' => 'Daftar Pengiriman',
+      'pengiriman' => $this->pengirimanModel->findAll()
+    ];
+    return view('pengiriman/listPengiriman', $data);
+  }
 }

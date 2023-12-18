@@ -4,8 +4,10 @@ namespace App\Controllers;
 
 class Home extends BaseController
 {
-    public function index()
+    protected $pesananList;
+    public function __construct()
     {
+        // Ambil data pesanan dari API order
         $apiUrl = 'http://localhost:8080/api/order';
 
         $ch = curl_init($apiUrl);
@@ -14,11 +16,17 @@ class Home extends BaseController
         curl_close($ch);
 
         if ($response) {
-            $pesananList = json_decode($response, true);
-
-            dd($pesananList);
+            $this->pesananList = json_decode($response, true);
         } else {
             echo 'Failed to fetch data from API.';
         }
+    }
+    public function index()
+    {
+        $data = [
+            'title' => 'Daftar Produk',
+            'produk' => $this->pesananList
+        ];
+        return view('home/page', $data);
     }
 }
