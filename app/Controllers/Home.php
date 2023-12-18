@@ -25,7 +25,7 @@ class Home extends BaseController
     {
         $data = [
             'title' => 'Daftar Produk',
-            'produk' => $this->pesananList->findAll()
+            'produk' => $this->pesananList
         ];
         return view('home/page', $data);
     }

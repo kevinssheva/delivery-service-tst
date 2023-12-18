@@ -4,7 +4,6 @@
 <div class="container">
     <h2 class="mt-3 text-center">Ini daftar pengiriman</h2>
     <div class="row container-card justify-content-center">
-        <?php $i = 1; ?>
         <?php foreach ($pengiriman as $p) : ?>
             <div class="card mx-3 my-3 py-2" style="width: 18rem;">
                 <div class="card-header" style="background-color: #c9caca">
