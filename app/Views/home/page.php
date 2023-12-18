@@ -5,7 +5,7 @@
   <h2 class="mt-3 text-center">Ini daftar pesanan</h2>
   <div class="row">
     <?php foreach ($produk as $p) : ?>
-      <div class="card mx-3 my-1" style="width: 18rem;">
+      <div class="card mx-3 my-1 px-0 shadow rounded-3 overflow-hidden border border-0" style="width: 18rem;">
         <img src="/img/<?= $p['gambarFileName']; ?>" alt="<?= $p['id_pesanan']; ?>" style="width: 100%; aspect-ratio: 3/2; object-fit: cover;">
         <div class="card-body">
           <h5 class="card-title"><?= $p['total_harga']; ?></h5>
