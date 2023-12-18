@@ -91,7 +91,7 @@ class Pengiriman extends BaseController
 
     $response = $this->sendNotification($data);
 
-    echo $response;
+    return redirect()->to('/pengiriman');
   }
 
   public function detail($id = 0)
@@ -148,7 +148,8 @@ class Pengiriman extends BaseController
 
     $response = $this->sendNotification($data);
 
-    echo $response;
+    //redirect back
+    return redirect()->to('/pengiriman');
   }
 
   protected function sendNotification($data)
@@ -167,7 +168,7 @@ class Pengiriman extends BaseController
 
     return $response ? $response : 'Gagal membuat notifikasi.';
   }
-  
+
   public function deliveryList(): string
   {
     $data = [

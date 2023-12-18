@@ -12,13 +12,13 @@ class UsersSeeder extends Seeder
     $data = [
       [
         'username' => 'admin1',
-        'password' => 'e00cf25ad42683b3df678c61f42c6bda',
+        'password' => 'admin1',
         'created_at' => Time::now(),
         'updated_at' => Time::now(),
       ],
       [
         'username' => 'admin2',
-        'password' => 'c84258e9c39059a89ab77d846ddab909',
+        'password' => 'admin2',
         'created_at' => Time::now(),
         'updated_at' => Time::now(),
       ],

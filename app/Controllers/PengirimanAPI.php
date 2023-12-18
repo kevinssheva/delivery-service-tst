@@ -12,10 +12,10 @@ class PengirimanAPI extends BaseController
   {
     $this->pengirimanModel = new PengirimanModel();
   }
-  public function getAllPengiriman()
+  public function getAllPengirimanStatus()
   {
     try {
-      $pengiriman = $this->pengirimanModel->findAll();
+      $pengiriman = $this->pengirimanModel->select('status, id_pesanan')->findAll();
 
       $response = [
         'status' => 'success',
