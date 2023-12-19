@@ -102,3 +102,29 @@
 ```bash
     php spark serve --port 8081
 ```
+
+## **Akun Untuk melakukan login**
+<p align="center"> 
+<table>
+    <tr>
+        <td colspan=3 align="center">Kelompok 19</td>
+    </tr>
+    <tr>
+        <td>No.</td>
+        <td>Username</td>
+        <td>Password</td>
+        <td>Email</td>
+    </tr>
+    <tr>
+        <td>1.</td>
+        <td>admin1</td>
+        <td>admin1</td>
+    </tr>
+    <tr>
+        <td>2.</td>
+        <td>admin2</td>
+        <td>admin2</td>
+    </tr>
+</table>
+</p>
+
