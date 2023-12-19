@@ -113,7 +113,6 @@
         <td>No.</td>
         <td>Username</td>
         <td>Password</td>
-        <td>Email</td>
     </tr>
     <tr>
         <td>1.</td>
